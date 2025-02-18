@@ -2,23 +2,16 @@ const express = require('express')
 
 const app = express()
 
+// /user?name=John&password=123
 app.get('/user', (req, res) => {
+    console.log(req.query)
     res.send({ firstName: 'John', lastName: 'Doe' })
 })
 
-app.post('/user', (req, res) => {
-    console.log('Data created successfully')
-    res.send('Data created successfully')
-})
-
-app.delete('/user', (req, res) => {
-    console.log('Data deleted successfully')
-    res.send('Data deleted successfully')
-})
-
-// This will handle all http method requests to /test
-app.use('/test', (req, res) => {
-    res.send('Testing Server')
+// /user/1/John/123
+app.get('/user/:id/:name/:password', (req, res) => {
+    console.log(req.params)
+    res.send({ firstName: 'John', lastName: 'Doe' })
 })
 
 const PORT = 3000;
