@@ -1,26 +1,26 @@
 const express = require('express')
+const { adminAuth, userAuth } = require('./middlewares/auth')
 
 const app = express()
 
-app.use(
-    '/user', 
-    (req, res, next) => {
-        console.log('Route Handler 1');
-        next()
-    },
-   (req, res, next) => {
-        console.log('Route Handler 2');
-        next()
-    },
-    (req, res, next) => {
-        console.log('Route Handler 3');
-        next()
-    },
-    (req, res, next) => {
-        console.log('Route Handler 4');
-        res.send('Response sent from Route Handler 4')
-    }
-)
+app.use('/admin', adminAuth)
+
+app.get('/admin/getAllUser', (req, res) => {
+    res.send('List of all users')
+})
+
+app.get('/admin/deleteUser', (req, res) => {
+    res.send('User deleted successfully')
+})
+
+app.get('/user/login', (req, res, next) => {
+    res.send('Login user')
+})
+
+app.get('/user/getProfile', userAuth, (req, res) => {
+    res.send('User profile')
+})
+
 
 const PORT = 3000;
 
