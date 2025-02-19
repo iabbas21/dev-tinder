@@ -3,24 +3,21 @@ const { adminAuth, userAuth } = require('./middlewares/auth')
 
 const app = express()
 
-app.use('/admin', adminAuth)
-
-app.get('/admin/getAllUser', (req, res) => {
-    res.send('List of all users')
+app.get('/user', (req, res) => {
+    try {
+        throw new Error('Broken down')
+        res.send('User Details!')
+    } catch (err) {
+        res.status(500).send('Something went wrong!!')
+    }
 })
 
-app.get('/admin/deleteUser', (req, res) => {
-    res.send('User deleted successfully')
+app.use('/', (err, req, res, next) => {
+    if(err) {
+        // Log the error
+        res.status(500).send('Something went wrong!')
+    }
 })
-
-app.get('/user/login', (req, res, next) => {
-    res.send('Login user')
-})
-
-app.get('/user/getProfile', userAuth, (req, res) => {
-    res.send('User profile')
-})
-
 
 const PORT = 3000;
 
