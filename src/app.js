@@ -1,24 +1,32 @@
 const express = require('express')
-const { adminAuth, userAuth } = require('./middlewares/auth')
-
+const connectDB = require('./config/database')
 const app = express()
+const User = require('./models/user')
 
-app.get('/user', (req, res) => {
-    try {
-        throw new Error('Broken down')
-        res.send('User Details!')
-    } catch (err) {
-        res.status(500).send('Something went wrong!!')
+app.post('/signup', async (req, res) => {
+    const userObj = {
+        firstName: 'Raghu',
+        lastName: 'Kumar',
+        emailId: 'raghu@gmail.com',
+        password: '123456',
+        age: 26,
+        gender: 'male'
     }
-})
-
-app.use('/', (err, req, res, next) => {
-    if(err) {
-        // Log the error
-        res.status(500).send('Something went wrong!')
+    const user = new User(userObj)
+    try {
+        await user.save()
+        res.send("User created successfully...")
+    } catch (error) {
+        res.status(400).send("Error saving data...")
     }
 })
 
 const PORT = 3000;
 
-app.listen(PORT, () => console.log('Server is running on PORT ' + PORT))
+// First connect to the database then start the server
+connectDB()
+    .then(() => {
+        console.log('DB connected successfully...')
+        app.listen(PORT, () => console.log('Server is running on PORT ' + PORT))
+    })
+    .catch(err => console.log('Cannot establish DB connection...'))
