@@ -48,6 +48,30 @@ app.get('/feed', async (req, res) => {
     }
 })
 
+// DELETE /user - Delete a user from DB
+app.delete('/user', async (req, res) => {
+    const userId = req.body.userId
+    try {
+        // await User.findByIdAndDelete(userId)
+        await User.findOneAndDelete({ _id: userId })
+        res.send("User deleted successfully...")
+    } catch(error) {
+        res.status(500).send("Error deleting user...")
+    }
+})
+
+// PATCH /user - Update a user document in DB
+app.patch('/user', async (req, res) => {
+    const userId = req.body.userId
+    const dataToUpdate = req.body
+    try {
+        await User.findByIdAndUpdate(userId, dataToUpdate)
+        res.send("User updated successfully...")
+    } catch(error) {
+        res.status(500).send("Error updating user...")
+    }
+})
+
 const PORT = 3000;
 
 // First connect to the database then start the server
