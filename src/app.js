@@ -61,10 +61,18 @@ app.delete('/user', async (req, res) => {
 })
 
 // PATCH /user - Update a user document in DB
-app.patch('/user', async (req, res) => {
-    const userId = req.body.userId
+app.patch('/user/:userId', async (req, res) => {
+    const userId = req.params.userId
     const dataToUpdate = req.body
     try {
+        const ALLOWED_UPDATES = ['gender', 'age', 'photoUrl', 'about', 'skills']
+        const isAllowed = Object.keys(dataToUpdate).every(update => ALLOWED_UPDATES.includes(update))
+        if(!isAllowed) {
+            return res.status(400).send("Update not allowed...")
+        }
+        if(dataToUpdate?.skills && dataToUpdate.skills.length > 10) {
+            return res.status(400).send("Skills limit exceeded...")
+        }
         await User.findByIdAndUpdate(userId, dataToUpdate, {
             runValidators: true,
         })
