@@ -12,7 +12,7 @@ app.post('/signup', async (req, res) => {
         await user.save()
         res.send("User created successfully...")
     } catch (error) {
-        res.status(400).send("Error saving data...")
+        res.status(400).send(error.message)
     }
 })
 
@@ -65,7 +65,9 @@ app.patch('/user', async (req, res) => {
     const userId = req.body.userId
     const dataToUpdate = req.body
     try {
-        await User.findByIdAndUpdate(userId, dataToUpdate)
+        await User.findByIdAndUpdate(userId, dataToUpdate, {
+            runValidators: true,
+        })
         res.send("User updated successfully...")
     } catch(error) {
         res.status(500).send("Error updating user...")
