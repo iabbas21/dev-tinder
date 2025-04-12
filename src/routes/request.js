@@ -55,7 +55,7 @@ requestRouter.post('/send/review/:status/:requestId', userAuth, async (req, res)
 
         const allowedStatus = ["accepted", "rejected"]
         if(!allowedStatus.includes(status)) {
-            return res.status(400).json({ message: "status not allowed" })
+            return res.status(400).send("status not allowed")
         }
 
         const connectionRequest = await ConnectionRequest.findOne({
@@ -65,7 +65,7 @@ requestRouter.post('/send/review/:status/:requestId', userAuth, async (req, res)
         })
 
         if(!connectionRequest) {
-            return res.status(404).json({ message: "connection is not valid" })
+            return res.status(404).send("connection is not valid")
         }
 
         connectionRequest.status = status

@@ -6,7 +6,7 @@ const userAuth = async (req, res, next) => {
         // Extract token from cookies
         const { token } = req.cookies
         if(!token) {
-            throw new Error('Token is invalid')
+            return res.status(401).send('Please login')
         }
 
         // Validate token by extracting hidden secret
