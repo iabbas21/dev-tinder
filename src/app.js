@@ -3,6 +3,7 @@ const cors = require('cors')
 const connectDB = require('./config/database')
 const app = express()
 const cookieParser = require('cookie-parser')
+require('dotenv').config();
 
 // Middlewares
 app.use(cors({
@@ -22,7 +23,7 @@ app.use('/', profileRouter)
 app.use('/', requestRouter)
 app.use('/', userRouter)
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 
 // First connect to the database then start the server
 connectDB()

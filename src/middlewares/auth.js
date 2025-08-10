@@ -10,7 +10,7 @@ const userAuth = async (req, res, next) => {
         }
 
         // Validate token by extracting hidden secret
-        const decoded = jwt.verify(token, 'Dev@Tinder$2025')
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
         // Fetch user with _id from DB
         const user = await User.findById(decoded._id)

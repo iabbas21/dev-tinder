@@ -3,6 +3,7 @@ const requestRouter = express.Router()
 const { userAuth } = require('../middlewares/auth')
 const ConnectionRequest = require('../models/connectionRequest')
 const User = require('../models/user')
+const { run } = require('../utils/sendEmail')
 
 requestRouter.post('/send/request/:status/:toUserId', userAuth, async (req, res) => {
     try {
@@ -38,6 +39,9 @@ requestRouter.post('/send/request/:status/:toUserId', userAuth, async (req, res)
         })
 
         const data = await connectionRequest.save()
+
+        const result = await run();
+        console.log(result);
 
         res.json({
             message: req.user.firstName + `${status === 'interested' ? " is " : " "}` + status + `${status === 'interested' ? " in " : " "}` + userToSendRequest.firstName,
