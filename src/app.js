@@ -3,7 +3,8 @@ const cors = require('cors')
 const connectDB = require('./config/database')
 const app = express()
 const cookieParser = require('cookie-parser')
-require('dotenv').config();
+require('dotenv').config()
+require('./utils/cronJob')
 
 // Middlewares
 app.use(cors({
