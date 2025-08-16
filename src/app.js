@@ -5,6 +5,7 @@ const app = express()
 const cookieParser = require('cookie-parser')
 require('dotenv').config()
 require('./utils/cronJob')
+const http = require('http')
 
 // Middlewares
 app.use(cors({
@@ -19,19 +20,26 @@ const profileRouter = require('./routes/profile')
 const requestRouter = require('./routes/request')
 const userRouter = require('./routes/user')
 const paymentRouter = require('./routes/payment')
+const courseRouter = require('./routes/course')
+const initializeSocket = require('./utils/socket')
+const chatRouter = require('./routes/chat')
 
 app.use('/', authRouter)
 app.use('/', profileRouter)
 app.use('/', requestRouter)
 app.use('/', userRouter)
 app.use('/', paymentRouter)
+app.use('/', courseRouter)
+app.use('/', chatRouter)
+
+const server = http.createServer(app)
+initializeSocket(server)
 
 const PORT = process.env.PORT;
-
 // First connect to the database then start the server
 connectDB()
     .then(() => {
         console.log('DB connected successfully...')
-        app.listen(PORT, () => console.log('Server is running on PORT ' + PORT))
+        server.listen(PORT, () => console.log('Server is running on PORT ' + PORT))
     })
     .catch(err => console.log('Cannot establish DB connection...'))
